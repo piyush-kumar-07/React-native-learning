@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+//import ProfileScreen from '../screens/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ApiFetchScreen from '../screens/13_ApiFetchScreen';
 
@@ -53,19 +53,7 @@ function BottomTabs() {
             />
 
 
-            <Tab.Screen
-                name="Profile"
-                component={ProfileScreen}
-                options={{
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Ionicons
-                            name={focused ? "person" : "person-outline"}
-                            color={color}
-                            size={size}
-                        />
-                    ),
-                }}
-            />
+
 
             <Tab.Screen
                 name="Settings"
@@ -99,3 +87,20 @@ function BottomTabs() {
 }
 
 export default BottomTabs;
+
+
+
+
+/*<Tab.Screen
+               name="Profile"
+               component={ProfileScreen}
+               options={{
+                   tabBarIcon: ({ focused, color, size }) => (
+                       <Ionicons
+                           name={focused ? "person" : "person-outline"}
+                           color={color}
+                           size={size}
+                       />
+                   ),
+               }}
+           />*/

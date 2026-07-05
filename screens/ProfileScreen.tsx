@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
 function HomeScreen({ navigation, route }: any) {
@@ -41,4 +41,4 @@ export default HomeScreen;
 /* how to pass data from one page to another page. here i passsed the values from home and used route in
 profile now then in profile it uses route.parm.{category} to receive values */
 //pop s used to remove multiple screens from the stack ex=> navigate.pop(2) , here 2 means remove 2 screens
-// popToTop is used to remove all scrrens except the first one ex=> navigate.popToTop();
+// popToTop is used to remove all scrrens except the first one ex=> navigate.popToTop();*/
