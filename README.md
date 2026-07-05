@@ -4,14 +4,22 @@ This repository documents my React Native learning journey.
 
 ## Topics Learned So Far
 
-- JSX
-- Components
+## Completed Topics
+
+- JavaScript Fundamentals
+- React Basics
+- React Native Components
+- Styling & Flexbox
 - Props
 - useState
-- FlatList
 - useEffect
+- FlatList
 - Navigation
-- Axios
+- Context API
+- Login Screen
+- Form Validation
+- Professional Form State Management
+- Git & GitHub
 
 ## Purpose
 
