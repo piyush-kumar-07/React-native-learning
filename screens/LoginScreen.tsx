@@ -7,19 +7,19 @@ import {
     TextInput,
     TouchableOpacity,
 } from 'react-native';
-
-const VALID_MOBILE = '1234567890';
-const VALID_MPIN = '1234';
+import api from '../services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginScreen({ navigation }: any) {
-
     const [form, setForm] = useState({
         name: '',
-        email: "",
+        email: '',
         mobile: '',
         mpin: '',
-    })
+    });
+
     const [error, setError] = useState('');
+
     const userContext = useContext(UserContext);
 
     if (!userContext) {
@@ -37,74 +37,112 @@ function LoginScreen({ navigation }: any) {
         });
     };
 
-    const validateForm = () => {
+    const handleLogin = async () => {
+        console.log("1. Login button pressed");
 
-        if (form.name.trim() === '') {
-            setError('Username is required');
-            return false;
-        }
+        const validateForm = () => {
 
-        if (form.email.trim() === '') {
-            setError('Email is required');
-            return false;
-        }
+            if (form.name.trim() === '') {
+                setError('Username is required');
+                return false;
+            }
 
-        if (!form.email.includes('@')) {
-            setError('Email must contain @');
-            return false;
-        }
+            if (form.email.trim() === '') {
+                setError('Email is required');
+                return false;
+            }
 
+            if (!form.email.includes('@')) {
+                setError('Email must contain @');
+                return false;
+            }
 
+            if (form.mobile.trim() === '') {
+                setError('Mobile Number is required');
+                return false;
+            }
 
-        if (form.mobile.trim() === '') {
-            setError('Mobile Number is required');
-            return false;
-        }
+            if (form.mobile.length !== 10) {
+                setError('Mobile Number must be 10 digits');
+                return false;
+            }
 
-        if (form.mobile.length !== 10) {
-            setError('Mobile Number must be 10 digits');
-            return false;
-        }
+            if (form.mpin.trim() === '') {
+                setError('MPIN is required');
+                return false;
+            }
 
-        if (form.mpin.trim() === '') {
-            setError('MPIN is required');
-            return false;
-        }
+            if (form.mpin.length !== 4) {
+                setError('MPIN must be 4 digits');
+                return false;
+            }
 
-        if (form.mpin.length !== 4) {
-            setError('MPIN must be 4 digits');
-            return false;
-        }
-
-        return true;
-    };
-
-    const handleLogin = () => {
-
+            return true;
+        };
         if (!validateForm()) {
             return;
         }
 
 
+        console.log("3. Validation passed");
 
-        if (form.mobile !== VALID_MOBILE || form.mpin !== VALID_MPIN) {
-            setError('Invalid Mobile Number or MPIN');
-            return;
+        try {
+            const response = await fetch(
+                'https://6a6a0be5eb87a96865a81f4d.mockapi.io/users'
+            );
+
+            const data = await response.json();
+
+            console.log(data);
+            console.log("4. API call successful");
+
+            const user = data.find(
+                (item: any) =>
+                    item.mobile === form.mobile &&
+                    item.password === form.mpin
+            );
+
+            console.log("5. Found user:", user);
+
+            if (!user) {
+                setError("Invalid Mobile Number or MPIN");
+                return;
+            }
+
+            const loggedInUser = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                mobile: user.mobile,
+            };
+
+            console.log("6. Logged in user created");
+
+            const token = "fake-jwt-token-123456";
+
+            await AsyncStorage.setItem("token", token);
+            console.log("7. Token saved");
+
+            await AsyncStorage.setItem(
+                "user",
+                JSON.stringify(loggedInUser)
+            );
+            console.log("8. User saved");
+
+            setUser(loggedInUser);
+            console.log("9. Context updated");
+            setError('');
+
+
+
+        } catch (error: any) {
+            console.log("MESSAGE:", error.message);
+            setError("Something went wrong");
         }
-
-        setError('');
-
-        setUser({
-            name: form.name,
-            email: form.email,
-            mobile: form.mobile,
-        });
-
-        navigation.replace('MainApp');
     };
+
     return (
         <View style={styles.container}>
-
             {error ? (
                 <Text style={styles.error}>{error}</Text>
             ) : null}
@@ -115,7 +153,7 @@ function LoginScreen({ navigation }: any) {
                 style={styles.input}
                 placeholder="Enter Username"
                 value={form.name}
-                onChangeText={(text) => handleChange("name", text)}// computed property name
+                onChangeText={(text) => handleChange('name', text)}
                 autoCapitalize="words"
             />
 
@@ -124,7 +162,6 @@ function LoginScreen({ navigation }: any) {
                 placeholder="Enter Email"
                 value={form.email}
                 onChangeText={(text) => handleChange('email', text)}
-
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -155,7 +192,6 @@ function LoginScreen({ navigation }: any) {
             >
                 <Text style={styles.buttonText}>LOGIN</Text>
             </TouchableOpacity>
-
         </View>
     );
 }
@@ -212,3 +248,4 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+/*cd .\Myapp*/

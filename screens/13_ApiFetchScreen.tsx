@@ -10,13 +10,12 @@ import {
     Button,
 } from 'react-native';
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    phone: string;
-    website: string;
+    mobile: string;
+    password: string;
 }
-
 function ApiFetchScreen() {
 
 
@@ -31,12 +30,14 @@ function ApiFetchScreen() {
         try {
 
             const response = await api.get('/users');
+            console.log(JSON.stringify(response.data, null, 2));
 
 
             setUsers(response.data); //  Axios automatically parses JSON into response.data
 
 
         } catch (error) {
+            console.log(error);
 
             setError('Something Went Wrong .\n Please try again');
         } finally {
@@ -92,13 +93,22 @@ function ApiFetchScreen() {
                         onRefresh={onRefresh}
                     />
                 }
-                keyExtractor={(item: User) => item.id.toString()}
-                renderItem={({ item }: { item: User }) => (
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
                     <View style={styles.card}>
                         <Text style={styles.name}>{item.name}</Text>
-                        <Text style={styles.email}>{item.email}</Text>
-                        <Text style={styles.phone}>{item.phone}</Text>
-                        <Text style={styles.website}>{item.website}</Text>
+
+                        <Text style={styles.email}>
+                            {item.email}
+                        </Text>
+
+                        <Text style={styles.phone}>
+                            {item.mobile}
+                        </Text>
+
+                        <Text style={styles.website}>
+                            {item.password}
+                        </Text>
                     </View>
                 )}
             />
@@ -175,3 +185,12 @@ const styles = StyleSheet.create({
 });
 
 export default ApiFetchScreen;
+
+
+/*| Method | Purpose                             | Example                      |
+| ------ | ----------------------------------- | ---------------------------- |
+| GET    | Read data                           | Get users                    |
+| POST   | Create new data                     | Register, Login, Place Order |
+| PUT    | Replace an existing resource        | Replace profile              |
+| PATCH  | Update part of an existing resource | Change email only            |
+| DELETE | Remove data                         | Delete comment               |*/

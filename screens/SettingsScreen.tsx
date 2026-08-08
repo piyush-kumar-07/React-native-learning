@@ -6,10 +6,11 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-
+import { Alert } from 'react-native';
 import { useContext } from 'react';
 import { UserContext } from '../context/UsersContext';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function SettingsScreen({ navigation }: any) {// defining the type declaration to avoid tyescript error 
     const userContext = useContext(UserContext);// reads the data from usercontext
@@ -17,14 +18,34 @@ function SettingsScreen({ navigation }: any) {// defining the type declaration t
     if (!userContext) {
         return null;
     }
-    const { user } = userContext;
+    const { user, setUser } = userContext;
     if (!user) {
         return (
             <View>
                 <Text>No user loaded</Text>
             </View>
         );
-    }
+    } const handleLogout = () => {
+        Alert.alert(
+            "Logout",
+            "Are you sure you want to logout?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Logout",
+                    onPress: async () => {
+                        await AsyncStorage.removeItem("user");
+                        await AsyncStorage.removeItem("token");
+
+                        setUser(null);
+                    },
+                },
+            ],
+        );
+    };
     return (
         <ScrollView style={styles.container}>
 
@@ -80,7 +101,9 @@ function SettingsScreen({ navigation }: any) {// defining the type declaration t
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.settingRow}>
+            <TouchableOpacity style={styles.settingRow}
+                onPress={handleLogout}
+            >
 
                 <View style={styles.rowContent}>
 
